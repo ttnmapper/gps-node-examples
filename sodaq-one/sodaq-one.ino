@@ -68,7 +68,7 @@ uint8_t txBuffer[9];
 uint32_t LatitudeBinary, LongitudeBinary;
 uint16_t altitudeGps;
 uint8_t hdopGps;
-int dr = 0;
+int dr = 5;
 
 void setup()
 {
