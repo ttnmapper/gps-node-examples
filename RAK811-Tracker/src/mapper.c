@@ -34,10 +34,6 @@
  */
 #define APP_TX_DUTYCYCLE_RND                        1000
 
-/*!
- * Default datarate
- */
-#define LORAWAN_DEFAULT_DATARATE                    DR_5
 
 /*!
  * LoRaWAN confirmed messages
@@ -89,10 +85,13 @@
 #if defined( REGION_CN470 ) || defined( REGION_CN779 ) || defined( REGION_EU433 ) || defined( REGION_EU868 ) || defined( REGION_IN865 ) || defined( REGION_KR920 )
 
 #define LORAWAN_APP_DATA_SIZE                       16
+#define LORAWAN_DEFAULT_DATARATE                    DR_5
+
 
 #elif defined( REGION_AS923 ) || defined( REGION_AU915 ) || defined( REGION_US915 ) || defined( REGION_US915_HYBRID )
 
 #define LORAWAN_APP_DATA_SIZE                       11
+#define LORAWAN_DEFAULT_DATARATE                    DR_4
 
 #else
 
@@ -205,29 +204,6 @@ void dump_hex2str(uint8_t *buf, uint8_t len) {
 	printf("\r\n");
 }
 
-/*!
- * \brief   Prepares the payload of the frame
- */
-void test_gps(void) {
-	double latitude, longitude, hdopGps = 0;
-	int16_t altitudeGps = 0xFFFF;
-	uint8_t ret;
-	ret = GpsGetLatestGpsPositionDouble(&latitude, &longitude);
-	altitudeGps = GpsGetLatestGpsAltitude(); // in m
-	hdopGps = GpsGetLatestGpsHorizontalDilution();
-
-	//	printf("[Debug]: latitude: %f, longitude: %f , altitudeGps: %d \n", latitude, longitude, altitudeGps);	    	
-}
-
-void test_temp(void) {
-	int8_t tempr = 25;
-
-	LIS3DH_GetTempRaw(&tempr); //only tempr changed value
-	tempr = tempr + 20; // temprature should be calibration  in a right temp for every device
-	printf("[Debug]: tempr: %d Bat: %dmv\r\n", tempr,
-			BoardBatteryMeasureVolage());
-}
-
 uint8_t GPS_GETFAIL = FAIL;
 
 static void PrepareTxFrame(uint8_t port) {
@@ -269,8 +245,8 @@ static void PrepareTxFrame(uint8_t port) {
 			AppDataSize = 9;
 
 		} else {
-			AppDataSize = 0;
-			GPS_GETFAIL = SUCCESS;
+			printf("No GPS fix.\r\n");
+ 			AppDataSize = 0;
 		}
 	}
 		break;
