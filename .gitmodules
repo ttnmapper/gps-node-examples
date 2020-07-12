@@ -1,0 +1,3 @@
+[submodule "Adafruit"]
+	path = Adafruit
+	url = https://github.com/AmedeeBulle/ttn-mapper.git
