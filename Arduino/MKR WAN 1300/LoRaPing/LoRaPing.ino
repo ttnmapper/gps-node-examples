@@ -19,7 +19,7 @@ String appKey = SECRET_APP_KEY;
 
 void setup() {
   Serial.begin(115200);
-  while (!Serial);
+  // while (!Serial);
   // change this to your regional band (eg. US915, AS923, ...)
   if (!modem.begin(EU868)) {
     Serial.println("Failed to start module");
